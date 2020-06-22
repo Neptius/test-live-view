@@ -1,0 +1,41 @@
+<h1>Listing Notes</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, NovyWeb.NotesLive.FormComponent,
+    id: @notes.id || :new,
+    title: @page_title,
+    action: @live_action,
+    notes: @notes,
+    return_to: Routes.notes_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Tag</th>
+      <th>Content</th>
+      <th>Show</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="notes" phx-update="replace">
+    <%= for notes <- @notes_collection do %>
+      <tr id="notes-<%= notes.id %>">
+        <td><%= notes.title %></td>
+        <td><%= notes.tag %></td>
+        <td><%= notes.content %></td>
+        <td><%= notes.show %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.notes_show_path(@socket, :show, notes) %></span>
+          <span><%= live_patch "Edit", to: Routes.notes_index_path(@socket, :edit, notes) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: notes.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Notes", to: Routes.notes_index_path(@socket, :new) %></span>

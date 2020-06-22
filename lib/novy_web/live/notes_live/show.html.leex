@@ -1,0 +1,37 @@
+<h1>Show Notes</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, NovyWeb.NotesLive.FormComponent,
+    id: @notes.id,
+    title: @page_title,
+    action: @live_action,
+    notes: @notes,
+    return_to: Routes.notes_show_path(@socket, :show, @notes) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @notes.title %>
+  </li>
+
+  <li>
+    <strong>Tag:</strong>
+    <%= @notes.tag %>
+  </li>
+
+  <li>
+    <strong>Content:</strong>
+    <%= @notes.content %>
+  </li>
+
+  <li>
+    <strong>Show:</strong>
+    <%= @notes.show %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.notes_show_path(@socket, :edit, @notes), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.notes_index_path(@socket, :index) %></span>
